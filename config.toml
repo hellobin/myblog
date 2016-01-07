@@ -1,7 +1,7 @@
 baseurl = "http://www.luobin.me/"
 languageCode = "en-us"
 title = "不足为外人道也"
-theme = "hugo-theme-casper"
+theme = "casper"
 
 [params]
 	description = "忽逢桃花林，夹岸数百步，芳草鲜美，落英缤纷"
