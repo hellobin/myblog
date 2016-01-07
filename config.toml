@@ -20,3 +20,9 @@ theme = "hugo-theme-casper"
   identifier = "blog"
   url = "/"
 
+[[menu.main]]
+  name = "Joke"
+  weight = 100
+  identifier = "joke"
+  url = "/joke"
+
