@@ -7,10 +7,8 @@ DisqusShortname = "icenan2"
 
 [params]
 	description = "忽逢桃花林，夹岸数百步，芳草鲜美，落英缤纷"
-	bio = "生命不息・折腾不止"
 	logo        = "images/logo.png"
 	cover = "http://77g3g7.com1.z0.glb.clouddn.com/trees.jpg"
-	author = "icenan2"
 	authorloacation = "shanghai,china"
 	githubName = "hellobin"
 	twitterName = "icenan2"
