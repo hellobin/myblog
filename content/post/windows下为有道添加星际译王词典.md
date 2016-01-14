@@ -14,7 +14,7 @@ title = "windows下为有道添加星际译王词典"
 
 &emsp;&emsp;windows下一直使用有道词典，缺陷没有离线词库。今天终于找到让有道词典可以支持离线的方法，那就是给其添加大名鼎鼎的星际译王的词典（其实星际译王也有windows版的）。    
 
- 1.  到这里下载自己需要的词典  http://abloz.com/huzheng/stardict-dic/zh_CN/
+ 1.  到这里[下载](http://abloz.com/huzheng/stardict-dic/zh_CN/)自己需要的词典 
 
  2.  下载的文件默认是tar.bz2格式，一种linux的文件打包压缩格式（因为星际诞生于gnu/linux平台）。有道并不支持这种压缩的格式，需要解压。用winrar，等很多解压缩软件都可以。
 
