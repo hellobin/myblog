@@ -4,10 +4,10 @@ comments = true
 date = "2013-05-15T09:21:14+08:00"
 draft = false
 image = ""
-menu = ""
+menu = "test"
 share = true
-slug = "2"
-tags = ["tag1", "tag2"]
+slug = "名不副实的JSON"
+tags = ["json", "javascript"]
 title = "“名不副实”的JSON"
 
 +++

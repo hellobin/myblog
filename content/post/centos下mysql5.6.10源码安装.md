@@ -6,9 +6,9 @@ draft = false
 image = ""
 menu = ""
 share = true
-slug = "1"
+slug = "centos下mysql5.6.10源码安装"
 tags = ["linux", "mysql"]
-title = "centos 下mysql5.6.10源码安装"
+title = "centos下mysql5.6.10源码安装"
 
 +++
 

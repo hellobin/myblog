@@ -1,10 +1,12 @@
 baseurl = "http://www.luobin.me/"
 languageCode = "en-us"
-title = "不足为外人道也"
+title = "不足为外人道"
 theme = "casper"
+paginate = 5
 
 [params]
 	description = "忽逢桃花林，夹岸数百步，芳草鲜美，落英缤纷"
+	bio = "IT software and Security Engineer, Open source enthusiast."
 	logo        = "images/logo.png"
 	cover = "images/cover.jpg"
 	author = "icenan2"
@@ -12,7 +14,6 @@ theme = "casper"
 	githubName = "hellobin"
 	twitterName = "icenan2"
 	hideHUGOSupport = false
-	authorwebsite = "http://www.luobin.me/"
 
 [[menu.main]]
   name = "Blog"
