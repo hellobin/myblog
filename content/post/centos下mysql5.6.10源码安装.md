@@ -13,8 +13,8 @@ title = "centos下mysql5.6.10源码安装"
 +++
 
 从mysql5.5起，mysql源码安装开始使用cmake了，所以首先要安装cmake
-可以用命令： 
-
+可以用命令:
+    
 		rpm -qa | grep cmake
 查询当前系统有没有安装查cmake。
 
@@ -25,12 +25,9 @@ title = "centos下mysql5.6.10源码安装"
 	#./configure
 	#make
 	#make install 
-
 可能会出现没有C++编译器的错误，默认的gcc默认没有支持c++，使用以下语句安装
+
 	#yum -y install gcc-c++
-
-
-
 执行源码编译配置脚本
 
 	cmake \
@@ -56,19 +53,11 @@ title = "centos下mysql5.6.10源码安装"
 	-- Could NOT find Curses (missing:  CURSES_LIBRARY 	CURSES_INCLUDE_PATH)
 	CMake Error at cmake/readline.cmake:82 (MESSAGE):
   	Curses library not found.  Please install appropriate package,。。。
-
 执行 yum -y install ncurses-devel 命令，然后删除生成的CMakeCache.txt文件，重新执行cmake
-
 执行 `＃make  && make install` 编译安装
-
-
-
-
-
 在运行mysqld的时候可能会遇到类似：
 
 	ERROR 2002 (HY000): Can’t connect to local MySQL server through socket ‘/var/lib/mysql/mysql.sock’ (2) 
 	
-这样的错误，只需重新确认一下mysql.sock文件的路径，在/etc/my.cnf 文件中设施一下socket=path即可。
-对于mysqladmin，同样需要在/etc/my.cnf 文件中[mysqladmin]下设置socket 路径
+这样的错误，只需重新确认一下mysql.sock文件的路径，在/etc/my.cnf 文件中设施一下socket=path即可。对于mysqladmin，同样需要在/etc/my.cnf 文件中[mysqladmin]下设置socket 路径。
 
