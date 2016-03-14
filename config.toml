@@ -6,7 +6,7 @@ paginate = 5
 DisqusShortname = "icenan2"
 
 [params]
-	description = "忽逢桃花林，夹岸数百步，芳草鲜美，落英缤纷"
+	description = "程序最根本的目的是什么？复现真实世界或人所构想的规律，减少重复工作的成本，或通过提升规模完成人所不能及之事。但是世间之事万千，有限的程序如何重现复杂的世界呢？答案是“抽象”。论及具体手段，无外乎“求同”与“存异”,即概括一般规律，处理特殊情况。"
 	cover = "http://77g3g7.com1.z0.glb.clouddn.com/trees.jpg"
 	authorloacation = "shanghai,china"
 	githubName = "hellobin"
