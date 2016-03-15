@@ -303,5 +303,146 @@ __shared_ptr_pointer<_Tp, _Dp, _Alloc>::__on_zero_shared() _NOEXCEPT
     __data_.first().second().~_Dp(); //?这里是销毁器也要释放的意思吗，看着像default_delete的析构函数？
 }
 ```
+有前面分析已知fisrt().second()是一个default_delete:
 
-shared_ptr的分析告一段落。
+```C++
+template <class _Tp>
+struct _LIBCPP_TYPE_VIS_ONLY default_delete
+{
+#ifndef _LIBCPP_HAS_NO_DEFAULTED_FUNCTIONS
+    _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR default_delete() _NOEXCEPT = default;
+#else
+    _LIBCPP_INLINE_VISIBILITY _LIBCPP_CONSTEXPR default_delete() _NOEXCEPT {}
+#endif
+    template <class _Up>
+        _LIBCPP_INLINE_VISIBILITY default_delete(const default_delete<_Up>&,
+             typename enable_if<is_convertible<_Up*, _Tp*>::value>::type* = 0) _NOEXCEPT {}
+    _LIBCPP_INLINE_VISIBILITY void operator() (_Tp* __ptr) const _NOEXCEPT
+        {
+            static_assert(sizeof(_Tp) > 0, "default_delete can not delete incomplete type");
+            static_assert(!is_void<_Tp>::value, "default_delete can not delete incomplete type");
+            delete __ptr;
+        }
+};
+```
+内部重载了operator()，接收一个_Tp* __ptr参数，`__data_.first().second()(__data_.first().first());`这句调用时传进的参数正是我们的raw指针。
+关于shared_ptr的分析告一段落。
+
+#### weak_ptr 
+经过上面的分析，shared_ptr似乎可以满足我们大部分关于指针的应用场景，然而智能毕竟不是万能,还有一些shared_ptr干不了的活,熟悉ios开发的同学应该清楚，强大的ARC(Automatic Reference Counting)技术依然解决不好如下图所示的循环引用的问题,所以引入了weak指针，同理C++11中引入weak_ptr来解决这一类问题.
+![](http://77g3g7.com1.z0.glb.clouddn.com/weak_ptr.png)
+我们可以把上面的`class X`,稍微修改验证下循环引用的问题：
+
+```C++
+class X{
+public:
+    X()= default;
+    X(int value)
+            :data(value),sp_(nullptr)
+    {
+        cout <<"constructor"<<endl;
+    }
+    X(int value,shared_ptr<X> &sp)
+    :data(value),sp_(sp)
+    {
+        cout <<"constructor"<<endl;
+    }
+    ~X()
+    {
+        cout <<"destructor"<<endl;
+    }
+    int get_data() const
+    {
+        return  data;
+    }
+
+    friend ostream& operator << (ostream &out, const X& x)
+    {
+        out <<x.get_data();
+        return out;
+    }
+    void set_sp(shared_ptr<X> &sp)
+    {
+        sp_ = sp;
+    }
+
+private:
+    int data;
+    shared_ptr<X>  sp_;
+};
+```
+测试代码如下：
+
+```C++
+void g()
+{
+    shared_ptr<X> sp1(new X(1));
+    shared_ptr<X> sp2(new X(2,sp1));
+    shared_ptr<X> sp3(new X(3,sp2));
+    sp1->set_sp(sp3);
+}
+
+int main()
+{
+    //f();
+    g();
+    return 0;
+}
+```
+执行编译一下：
+
+```shell
+luobin@luobinMini:shared_point$ clang++ -std=c++11 main.cpp 
+luobin@luobinMini:shared_point$ ./a.out 
+constructor
+constructor
+constructor
+```
+事实证明我们new出来的3个对象在g()退出后并没有被释放，而我们又失去了对其的控制，所以造成了内存泄露。
+我们将成员`sp_`改成weak_ptr,另外由于weak_ptr不能用nullptr构造,所以还要修改下第二个构造函数：
+
+```C++
+    X(int value)
+            :data(value)
+    {
+        cout <<"constructor"<<endl;
+    }
+```
+继续执行相同的测试代码：
+
+```shell
+luobin@luobinMini:shared_point$ clang++ -std=c++11 main.cpp 
+luobin@luobinMini:shared_point$ ./a.out 
+constructor
+constructor
+constructor
+destructor
+destructor
+destructor
+```
+perfect,完美解决环形引用的问题。
+有了前面的分析基础，我们看下weak_ptr的模板类的实现：
+
+```C++
+template<class _Tp>
+class _LIBCPP_TYPE_VIS_ONLY weak_ptr
+{
+public:
+    typedef _Tp element_type;
+private:
+    element_type*        __ptr_;
+    __shared_weak_count* __cntrl_;
+
+public:
+    _LIBCPP_CONSTEXPR weak_ptr() _NOEXCEPT;
+    template<class _Yp> weak_ptr(shared_ptr<_Yp> const& __r,
+                   typename enable_if<is_convertible<_Yp*, _Tp*>::value, __nat*>::type = 0)
+                        _NOEXCEPT;
+    weak_ptr(weak_ptr const& __r) _NOEXCEPT;
+    ...
+```
+结构大同小异，甚至`__cntrl_`都是相同的`__shared_weak_cout`类型。
+
+#### unique_ptr
+
+
