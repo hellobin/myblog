@@ -1,7 +1,7 @@
 +++
 author = ""
 comments = true
-date = "2016-03-07T17:50:24+08:00"
+date = "2014-06-07T17:50:24+08:00"
 draft = false
 image = ""
 menu = ""
@@ -329,7 +329,7 @@ struct _LIBCPP_TYPE_VIS_ONLY default_delete
 关于shared_ptr的分析告一段落。
 
 #### weak_ptr 
-经过上面的分析，shared_ptr似乎可以满足我们大部分关于指针的应用场景，然而智能毕竟不是万能,还有一些shared_ptr干不了的活,熟悉ios开发的同学应该清楚，强大的ARC(Automatic Reference Counting)技术依然解决不好如下图所示的循环引用的问题,所以引入了weak指针，同理C++11中引入weak_ptr来解决这一类问题.
+&emsp;&emsp;经过上面的分析，shared_ptr似乎可以满足我们大部分关于指针的应用场景，然而智能毕竟不是万能,还有一些shared_ptr干不了的活,熟悉ios开发的同学应该清楚，强大的ARC(Automatic Reference Counting)技术依然解决不好如下图所示的循环引用的问题,所以引入了weak指针，同理C++11中引入weak_ptr来解决这一类问题.
 ![](http://77g3g7.com1.z0.glb.clouddn.com/weak_ptr.png)
 我们可以把上面的`class X`,稍微修改验证下循环引用的问题：
 
@@ -445,4 +445,30 @@ public:
 
 #### unique_ptr
 
+&emsp;&emsp;关于unique_ptr,从名字看，强调的是unique,表示的是全局只能有一个unique_ptr对象对raw指针拥有控制权。在一些适应的场景下比shared_ptr更高效一些，因为，`shared_ptr`要通过一个`__cntrl_`控制引用计数决定raw指针的施放时机，而`unique_ptr`只需要维护一个`__ptr_` :
 
+```C++
+template <class _Tp, class _Dp = default_delete<_Tp> >
+class _LIBCPP_TYPE_VIS_ONLY unique_ptr
+{
+public:
+    typedef _Tp element_type;
+    typedef _Dp deleter_type;
+    typedef typename __pointer_type<_Tp, deleter_type>::type pointer;
+private:
+    __compressed_pair<pointer, deleter_type> __ptr_;
+
+#ifdef _LIBCPP_HAS_NO_RVALUE_REFERENCES
+    unique_ptr(unique_ptr&);
+    template <class _Up, class _Ep>
+        unique_ptr(unique_ptr<_Up, _Ep>&);
+    unique_ptr& operator=(unique_ptr&);
+    template <class _Up, class _Ep>
+        unique_ptr& operator=(unique_ptr<_Up, _Ep>&);
+#endif  // _LIBCPP_HAS_NO_RVALUE_REFERENCES
+```
+`unique_ptr` 通过delete 掉copy constructor和 copy assignment来确保一个`unique_ptr`对象对raw指针的唯一控制权。但是通过`std::move`可以进行控制权之间的转移，所以使用`unique_ptr`谨记一点即可：控制权只能转移，不能复制。 
+
+#### 总结
+
+&emsp;&emsp;使用智能指针可以很大程度上将精力从繁琐的控制指针生命周期的工作中释放出来，这是C++作为一个没有GC的语言在开发效率上的一大进步。但是使用过程中要牢记，要么全部使用raw指针，要么交由智能指针全权负责，换句话说就是：要么裸奔，要么全副武装，切勿混搭。
