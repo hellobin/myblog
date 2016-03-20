@@ -8,12 +8,12 @@ menu = ""
 share = true
 slug = "centos的逆袭"
 tags = ["centos", "service"]
-title = "centos的逆袭"
+title = "CentOS的逆袭"
 
 +++
 
 ![centos.png](http://user-image.logdown.io/user/1175/blog/1158/post/98892/NdKBG3eTS2mFhnM7n1IS_centos.png)    
-最近想用python搭个网站，研究了目前主流服务器的配置，最后操作系统决定选择CentOs，为什么选它呢： 
+最近想用python搭个网站，研究了目前主流服务器的配置，最后操作系统决定选择CentOS，为什么选它呢： 
 
 1. 免费  
 2. 稳定 
