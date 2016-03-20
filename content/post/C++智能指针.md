@@ -467,8 +467,8 @@ private:
         unique_ptr& operator=(unique_ptr<_Up, _Ep>&);
 #endif  // _LIBCPP_HAS_NO_RVALUE_REFERENCES
 ```
-`unique_ptr` 通过delete 掉copy constructor和 copy assignment来确保一个`unique_ptr`对象对raw指针的唯一控制权。但是通过`std::move`可以进行控制权之间的转移，所以使用`unique_ptr`谨记一点即可：控制权只能转移，不能复制。 
+`unique_ptr` 通过delete 掉copy constructor和 copy assignment operators来确保一个`unique_ptr`对象对raw指针的唯一控制权。但是通过`std::move`可以进行控制权之间的转移，所以使用`unique_ptr`谨记一点即可：控制权只能转移，不能复制。 
 
 #### 总结
 
-&emsp;&emsp;使用智能指针可以很大程度上将精力从繁琐的控制指针生命周期的工作中释放出来，这是C++作为一个没有GC的语言在开发效率上的一大进步。但是使用过程中要牢记，要么全部使用raw指针，要么交由智能指针全权负责，换句话说就是：要么裸奔，要么全副武装，切勿混搭。
+&emsp;&emsp;使用智能指针可以很大程度上将精力从繁琐的控制指针生命周期的工作中释放出来，这是C++作为一个没有GC的语言在开发效率上的一大进步。但是使用过程中要牢记，要么全部使用raw指针，要么交由智能指针全权负责，换句话说就是：要么裸奔，要么全副武装，谨慎混搭。

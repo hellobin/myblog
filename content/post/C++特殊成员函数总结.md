@@ -76,6 +76,7 @@ title = "C++特殊成员函数总结"
 		int data;
 	};
 &emsp;&emsp;另外，这些special member function 同样遵守c++的access rules，标准中的原话是这样说的：
+
 >Special member functions obey the usual access rules (Clause 11). [Example: declaring a constructor protected ensures that only derived classes and friends can create objects using it. — end example ]
 
 如果我们灵活运用public、protect、private 等access rules，可以实现，满足各种特殊需求，比如常用的所谓单例模式，强制把各种可能构造出对象的相关的成员函数声明为private，仅提供一个static 成员函数用于获取/生成这个单例对象：
