@@ -181,7 +181,7 @@ SFINAE名字听上去很高大上，其实知道is_convertible和enable_if表示
 template< class From, class To >
 struct is_convertible;
 ```
-`typename enable_if<is_convertible<_Yp*, element_type*>::value, __nat>::type = __nat()`这一语句实际上表示的意思是当is_convertible的value为true的时候生命一个带默认值的形参，即成功匹配后的构造函数类型应该是这样的
+`typename enable_if<is_convertible<_Yp*, element_type*>::value, __nat>::type = __nat()`这一语句实际上表示的意思是当is_convertible的value为true的时候声明一个带默认值的形参，即成功匹配后的构造函数类型应该是这样的
 `shared_ptr(X *__p,__nat=__nat())`,为了验证下我们的分析，将我们上面的测试函数f()稍微修改一下：
 
 ```C++
